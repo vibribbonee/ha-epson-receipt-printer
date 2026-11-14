@@ -1,0 +1,132 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add an ESC/POS printer",
+        "description": "Use the printer's IP address and raw TCP port (usually 9100).",
+        "data": {
+          "name": "Printer name",
+          "host": "Host or IP address",
+          "port": "TCP port"
+        }
+      },
+      "confirm": {
+        "title": "Add discovered Epson printer",
+        "description": "Add {name} to Home Assistant?"
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to the printer. Check its address, port, and network connection."
+    },
+    "abort": {
+      "already_configured": "This printer is already configured.",
+      "unsupported_device": "This Epson printer model is not supported."
+    }
+  },
+  "services": {
+    "print_text": {
+      "name": "Print text",
+      "description": "Print plain text or compose a receipt from styled text, images, to-do lists, QR codes, barcodes, and spacing blocks.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Printer"
+        },
+        "text": {
+          "name": "Text",
+          "description": "Text to print. Newlines are preserved. Use this or Composed content."
+        },
+        "blocks": {
+          "name": "Composed content",
+          "description": "Ordered styled text, image, to-do list, QR, barcode, and spacing blocks. Image paths are relative to /config/www."
+        },
+        "alignment": {
+          "name": "Alignment"
+        },
+        "text_size": {
+          "name": "Text size"
+        },
+        "font": {
+          "name": "Font"
+        },
+        "bold": {
+          "name": "Bold"
+        },
+        "underline": {
+          "name": "Underline"
+        },
+        "printable_width_mm": {
+          "name": "Printable width",
+          "description": "Select the roll width loaded in the TM-T70II. This setting controls image placement."
+        },
+        "cut_paper": {
+          "name": "Cut paper",
+          "description": "Disable this when you want to tear the receipt manually."
+        }
+      }
+    },
+    "print_shopping_list": {
+      "name": "Print shopping list",
+      "description": "Print the active items from a Home Assistant to-do list.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Receipt printer"
+        },
+        "entity_id": {
+          "name": "To-do list"
+        },
+        "store": {
+          "name": "Store name"
+        },
+        "user": {
+          "name": "Name for the thank-you line"
+        },
+        "paid_back": {
+          "name": "Paid-back checklist"
+        },
+        "bonus": {
+          "name": "Barcode or QR data",
+          "description": "Use auto to detect legacy underscore-prefixed QR, EAN-13 numbers, or Code 128."
+        },
+        "title_alignment": {
+          "name": "Heading alignment"
+        },
+        "title_size": {
+          "name": "Heading size"
+        },
+        "item_size": {
+          "name": "Item text size"
+        },
+        "item_bold": {
+          "name": "Bold shopping items"
+        },
+        "item_prefix": {
+          "name": "Item prefix",
+          "description": "Choose checkboxes, bullets, dashes, numbering, or no prefix."
+        },
+        "show_timestamp": {
+          "name": "Print timestamp"
+        },
+        "thank_you": {
+          "name": "Thank-you message",
+          "description": "Auto prints it when a paid-back checklist is supplied."
+        },
+        "bonus_type": {
+          "name": "Bonus code type",
+          "description": "Auto preserves the existing detection rules; select a type to override them."
+        },
+        "barcode_height": {
+          "name": "Barcode height",
+          "description": "ESC/POS dot units, from 20 to 255."
+        },
+        "qr_size": {
+          "name": "QR module size",
+          "description": "ESC/POS module units, from 1 to 16."
+        },
+        "cut_paper": {
+          "name": "Cut paper",
+          "description": "Disable this when you want to tear the receipt manually."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "domain": "epson_receipt_printer",
+  "name": "Epson ESC/POS Receipt Printer",
+  "codeowners": [
+    "@vibribbonee"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/vibribbonee/ha-epson-receipt-printer#readme",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "zeroconf": [
+    {
+      "type": "_pdl-datastream._tcp.local.",
+      "properties": {
+        "ty": "*tm-t70ii*"
+      }
+    }
+  ],
+  "version": "0.2.0",
+  "issue_tracker": "https://github.com/vibribbonee/ha-epson-receipt-printer/issues"
+}

@@ -1,0 +1,196 @@
+print_text:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: epson_receipt_printer
+    text:
+      selector:
+        text:
+          multiline: true
+    blocks:
+      selector:
+        object:
+    alignment:
+      default: left
+      selector:
+        select:
+          options:
+            - value: left
+              label: Left
+            - value: center
+              label: Center
+            - value: right
+              label: Right
+    text_size:
+      default: normal
+      selector:
+        select:
+          options:
+            - value: normal
+              label: Normal
+            - value: double_height
+              label: Double height
+            - value: double_width
+              label: Double width
+            - value: double
+              label: Double width and height
+    font:
+      default: A
+      selector:
+        select:
+          options:
+            - value: A
+              label: Font A (standard)
+            - value: B
+              label: Font B (narrow)
+    bold:
+      default: false
+      selector:
+        boolean:
+    underline:
+      default: false
+      selector:
+        boolean:
+    printable_width_mm:
+      default: "72"
+      selector:
+        select:
+          options:
+            - value: "72"
+              label: 80 mm roll (72 mm printable)
+            - value: "52"
+              label: 58 mm roll (416 dots printable)
+    cut_paper:
+      default: true
+      selector:
+        boolean:
+print_shopping_list:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: epson_receipt_printer
+    entity_id:
+      required: true
+      selector:
+        entity:
+          filter:
+            domain: todo
+    store:
+      selector:
+        text:
+    user:
+      selector:
+        text:
+    paid_back:
+      selector:
+        text:
+          multiline: true
+    bonus:
+      selector:
+        text:
+    title_alignment:
+      default: center
+      selector:
+        select:
+          options:
+            - value: left
+              label: Left
+            - value: center
+              label: Center
+            - value: right
+              label: Right
+    title_size:
+      default: normal
+      selector:
+        select:
+          options:
+            - value: normal
+              label: Normal
+            - value: double_height
+              label: Double height
+            - value: double_width
+              label: Double width
+            - value: double
+              label: Double width and height
+    item_size:
+      default: normal
+      selector:
+        select:
+          options:
+            - value: normal
+              label: Normal
+            - value: double_height
+              label: Double height
+            - value: double_width
+              label: Double width
+            - value: double
+              label: Double width and height
+    item_bold:
+      default: false
+      selector:
+        boolean:
+    item_prefix:
+      default: checkbox
+      selector:
+        select:
+          options:
+            - value: checkbox
+              label: Checkbox
+            - value: bullet
+              label: Bullet
+            - value: dash
+              label: Dash
+            - value: none
+              label: No prefix
+            - value: number
+              label: Number
+    show_timestamp:
+      default: true
+      selector:
+        boolean:
+    thank_you:
+      default: auto
+      selector:
+        select:
+          options:
+            - value: auto
+              label: Automatic
+            - value: always
+              label: Always
+            - value: never
+              label: Never
+    bonus_type:
+      default: auto
+      selector:
+        select:
+          options:
+            - value: auto
+              label: Automatic
+            - value: qr
+              label: QR code
+            - value: ean13
+              label: EAN-13 barcode
+            - value: code128
+              label: Code 128 barcode
+    barcode_height:
+      default: 100
+      selector:
+        number:
+          min: 20
+          max: 255
+          mode: box
+    qr_size:
+      default: 6
+      selector:
+        number:
+          min: 1
+          max: 16
+          mode: box
+    cut_paper:
+      default: true
+      selector:
+        boolean:
