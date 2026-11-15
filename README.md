@@ -16,7 +16,18 @@ Turn Home Assistant lists and automations into paper receipts on a networked ESC
 
 Install from Home Assistant Marketplace and restart Home Assistant. Then go to **Settings → Devices & services → Add integration → Epson ESC/POS Receipt Printer**. Enter the printer’s address and port. Keep your existing entry when upgrading.
 
-[Receipt printing actions](custom_components/epson_receipt_printer/services.yaml)
+## Print a receipt
+
+In Home Assistant, open **Developer Tools → Actions**, select **Epson ESC/POS Receipt Printer: Print text**, and choose your printer. The action can also run in an automation.
+
+```yaml
+action: epson_receipt_printer.print_text
+data:
+  config_entry_id: YOUR_PRINTER_CONFIG_ENTRY_ID
+  text: "Shopping list: apples, milk, bread"
+```
+
+[Receipt and shopping-list printing options](custom_components/epson_receipt_printer/services.yaml)
 
 ## Contributing
 
