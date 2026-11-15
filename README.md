@@ -1,21 +1,15 @@
 # Epson ESC/POS Receipt Printer
 
+Print text, receipts, barcodes, and QR codes on a networked ESC/POS printer.
+
 [![Add to Home Assistant Marketplace](https://my.home-assistant.io/badges/marketplace_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=vibribbonee&repository=ha-epson-receipt-printer&category=integration)
 
-Print receipts, shopping lists, barcodes, and QR codes on a networked ESC/POS printer.
+Install from Home Assistant Marketplace and restart Home Assistant. Then go to **Settings → Devices & services → Add integration → Epson ESC/POS Receipt Printer**. Enter the printer’s address and port. Keep your existing entry when upgrading.
 
-## Setup
-
-Install the integration through the Home Assistant Marketplace using the button above, or copy `custom_components/epson_receipt_printer` into Home Assistant’s `custom_components` directory. Restart Home Assistant, then open **Settings → Devices & services → Add integration**. Choose Epson ESC/POS Receipt Printer and enter the printer address and port.
-
-For an upgrade, keep the existing integration entry so Home Assistant retains its configuration.
-
-See the [printer examples and service documentation](https://github.com/vibribbonee/home-assistant-printers) for automation examples.
+[Receipt printing actions](custom_components/epson_receipt_printer/services.yaml)
 
 ## Contributing
 
-Pull requests are welcome. Describe what changed and how you tested it.
+Pull requests are welcome. Describe the change and how you tested it.
 
-## AI disclosure
-
-OpenAI Codex assisted with development, testing, and documentation.
+[MIT license](LICENSE). OpenAI Codex assisted with development, testing, and documentation.
