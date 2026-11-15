@@ -8,13 +8,13 @@ Turn Home Assistant lists and automations into paper receipts on a networked ESC
 
 ## Features
 
-- Print a to-do list, formatted text, or receipt layouts.
-- Add barcodes or QR codes, including store loyalty codes.
-- Trigger printing from an automation or dashboard button over your local network.
+- **Print receipts and lists.** Send formatted text or print items directly from a Home Assistant to-do list.
+- **Add barcodes and QR codes.** Include a loyalty code or other scannable text.
+- **Print over the local network.** Use a networked ESC/POS printer, typically on TCP port 9100.
 
 ## Install
 
-Install from Home Assistant Marketplace and restart Home Assistant. Then go to **Settings → Devices & services → Add integration → Epson ESC/POS Receipt Printer**. Enter the printer’s address and port. Keep your existing entry when upgrading.
+Install from Marketplace using the button above, then restart Home Assistant. Then go to **Settings → Devices & services → Add integration → Epson ESC/POS Receipt Printer**. Enter the printer’s address and port.
 
 ## Print a receipt
 
