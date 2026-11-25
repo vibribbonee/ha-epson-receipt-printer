@@ -92,6 +92,22 @@ def _read_image(hass: HomeAssistant, relative_path: str) -> bytes:
     return image_path.read_bytes()
 
 
+async def _async_todo_items(hass: HomeAssistant, list_entity: str) -> list[str]:
+    """Return the active item names of a to-do list."""
+    response = await hass.services.async_call(
+        "todo",
+        "get_items",
+        {CONF_ENTITY_ID: list_entity, "status": "needs_action"},
+        blocking=True,
+        return_response=True,
+    )
+    return [
+        str(item.get("summary", "")).strip()
+        for item in response.get(list_entity, {}).get("items", [])
+        if str(item.get("summary", "")).strip()
+    ]
+
+
 def _get_printer_entry(
     hass: HomeAssistant, entry_id: str
 ) -> config_entries.ConfigEntry:
@@ -142,27 +158,21 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                         image_path = block.get("image_path", "").strip()
                         if not image_path:
                             raise ServiceValidationError(f"Epson image block {index} needs image_path.")
-                        block["image_data"] = await hass.async_add_executor_job(
-                            _read_image, hass, image_path
-                        )
+                        try:
+                            block["image_data"] = await hass.async_add_executor_job(
+                                _read_image, hass, image_path
+                            )
+                        except (OSError, ValueError) as err:
+                            raise ServiceValidationError(
+                                f"Epson image block {index} could not read {image_path}: {err}"
+                            ) from err
                     elif block["type"] == "todo_list":
                         list_entity = block.get("entity_id", "")
                         if not list_entity:
                             raise ServiceValidationError(
                                 f"Epson to-do block {index} needs entity_id."
                             )
-                        response = await hass.services.async_call(
-                            "todo",
-                            "get_items",
-                            {CONF_ENTITY_ID: list_entity, "status": "needs_action"},
-                            blocking=True,
-                            return_response=True,
-                        )
-                        items = [
-                            str(item.get("summary", "")).strip()
-                            for item in response.get(list_entity, {}).get("items", [])
-                            if str(item.get("summary", "")).strip()
-                        ]
+                        items = await _async_todo_items(hass, list_entity)
                         prefixes = {
                             "checkbox": "[ ] ",
                             "bullet": "* ",
@@ -215,18 +225,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         entry = _get_printer_entry(hass, call.data[ATTR_CONFIG_ENTRY_ID])
         list_entity = call.data[CONF_ENTITY_ID]
         try:
-            response = await hass.services.async_call(
-                "todo",
-                "get_items",
-                {CONF_ENTITY_ID: list_entity, "status": "needs_action"},
-                blocking=True,
-                return_response=True,
-            )
-            items = [
-                str(item.get("summary", "")).strip()
-                for item in response.get(list_entity, {}).get("items", [])
-                if str(item.get("summary", "")).strip()
-            ]
+            items = await _async_todo_items(hass, list_entity)
             async with _get_print_lock(hass, entry.entry_id):
                 await hass.async_add_executor_job(
                     print_shopping_receipt,

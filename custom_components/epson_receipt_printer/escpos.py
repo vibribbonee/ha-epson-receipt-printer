@@ -9,13 +9,26 @@ from datetime import datetime
 from PIL import Image, ImageOps
 
 
+# ESC @ resets the printer; ESC t 19 selects code page PC858 (CP858), which
+# has the euro sign and the accented letters CP437 lacks.
+INIT = b"\x1b@\x1bt\x13"
+# Typographic characters that phones and to-do apps insert, mapped to the
+# closest printable form instead of "?".
+_REPLACEMENTS = str.maketrans({
+    "\u2018": "'", "\u2019": "'", "\u201a": "'", "\u201b": "'",
+    "\u201c": '"', "\u201d": '"', "\u201e": '"', "\u00ab": '"', "\u00bb": '"',
+    "\u2013": "-", "\u2014": "-", "\u2212": "-", "\u2026": "...",
+    "\u00a0": " ", "\u2009": " ", "\u202f": " ", "\u2022": "*",
+})
+
+
 def _text(value: str) -> bytes:
     safe = "".join(
         character
-        for character in value.replace("\r", "")
+        for character in value.replace("\r", "").translate(_REPLACEMENTS)
         if character in "\n\t" or (ord(character) >= 0x20 and ord(character) != 0x7F)
     )
-    return safe.encode("cp437", errors="replace")
+    return safe.encode("cp858", errors="replace")
 
 
 def _ean13_check_digit(first_twelve: str) -> str:
@@ -152,7 +165,7 @@ def build_blocks_receipt(
     """Compose styled text, raster images, and spacing in one receipt job."""
     if not blocks:
         raise ValueError("There are no content blocks to print")
-    output = bytearray(b"\x1b@")
+    output = bytearray(INIT)
     for block in blocks:
         spacing_before = round(block.get("spacing_before_mm", 0) * 8)
         if spacing_before:
@@ -244,7 +257,7 @@ def build_shopping_receipt(
         raise ValueError("There are no active items to print")
 
     timestamp = timestamp or datetime.now().astimezone().strftime("%d/%m/%Y %H:%M")
-    output = bytearray(b"\x1b@")
+    output = bytearray(INIT)
     output.extend(_alignment(title_alignment))
     output.extend(_style(title_size, bold=True))
     output.extend(_text(f"{store or 'Shopping'} list\n"))
@@ -366,7 +379,7 @@ def print_text(
     underline: bool = False,
     cut_paper: bool = True,
 ) -> None:
-    payload = bytearray(b"\x1b@")
+    payload = bytearray(INIT)
     payload.extend(_alignment(alignment))
     payload.extend(_style(size, bold=bold, underline=underline, font=font))
     payload.extend(_text(text.strip() + "\n\n"))

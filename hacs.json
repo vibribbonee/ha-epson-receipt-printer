@@ -1,3 +1,4 @@
 {
-  "name": "Epson ESC/POS Receipt Printer"
+  "name": "Epson ESC/POS Receipt Printer",
+  "homeassistant": "2024.12.0"
 }

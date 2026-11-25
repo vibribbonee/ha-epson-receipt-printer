@@ -13,6 +13,14 @@
       "confirm": {
         "title": "Add discovered Epson printer",
         "description": "Add {name} to Home Assistant?"
+      },
+      "reconfigure": {
+        "title": "Change printer address",
+        "description": "Use the printer's new IP address or host name and raw TCP port (usually 9100).",
+        "data": {
+          "host": "Host or IP address",
+          "port": "TCP port"
+        }
       }
     },
     "error": {
@@ -20,7 +28,8 @@
     },
     "abort": {
       "already_configured": "This printer is already configured.",
-      "unsupported_device": "This Epson printer model is not supported."
+      "unsupported_device": "This Epson printer model is not supported.",
+      "reconfigure_successful": "The printer address was updated."
     }
   },
   "services": {

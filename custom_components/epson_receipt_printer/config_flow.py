@@ -103,3 +103,34 @@ class EpsonReceiptPrinterConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
         )
         return self.async_show_form(step_id="user", data_schema=schema, errors=errors)
+
+    async def async_step_reconfigure(self, user_input=None):
+        """Point an existing printer at a new address, e.g. after a DHCP change."""
+        entry = self._get_reconfigure_entry()
+        errors = {}
+        if user_input is not None:
+            host = user_input[CONF_HOST].strip()
+            port = int(user_input[CONF_PORT])
+            if not await _can_connect(host, port):
+                errors["base"] = "cannot_connect"
+            else:
+                unique_id = f"{host.lower()}:{port}"
+                if any(
+                    other.unique_id == unique_id and other.entry_id != entry.entry_id
+                    for other in self._async_current_entries()
+                ):
+                    return self.async_abort(reason="already_configured")
+                return self.async_update_reload_and_abort(
+                    entry,
+                    unique_id=unique_id,
+                    data_updates={CONF_HOST: host, CONF_PORT: port},
+                )
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_HOST, default=entry.data[CONF_HOST]): TextSelector(),
+                vol.Required(CONF_PORT, default=entry.data[CONF_PORT]): NumberSelector(
+                    NumberSelectorConfig(min=1, max=65535, mode=NumberSelectorMode.BOX)
+                ),
+            }
+        )
+        return self.async_show_form(step_id="reconfigure", data_schema=schema, errors=errors)
