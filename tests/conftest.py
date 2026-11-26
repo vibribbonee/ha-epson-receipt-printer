@@ -14,3 +14,12 @@ if str(ROOT) not in sys.path:
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations):
     yield
+
+
+@pytest.fixture(autouse=True)
+def printer_reachable():
+    """Tests never touch the network; the Online check sees a reachable printer."""
+    from unittest.mock import patch
+
+    with patch("custom_components.epson_receipt_printer.binary_sensor._can_connect", return_value=True) as check:
+        yield check

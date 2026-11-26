@@ -8,7 +8,7 @@ from pathlib import Path
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.const import ATTR_CONFIG_ENTRY_ID, CONF_ENTITY_ID
+from homeassistant.const import ATTR_CONFIG_ENTRY_ID, Platform, CONF_ENTITY_ID
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv, service
@@ -19,6 +19,7 @@ from .const import CONF_HOST, CONF_PORT, DOMAIN, SERVICE_PRINT_SHOPPING_LIST, SE
 from .escpos import print_blocks, print_shopping_receipt, print_text
 
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+PLATFORMS = [Platform.BINARY_SENSOR]
 BLOCK_SCHEMA = vol.Schema(
     {
         vol.Required("type"): vol.In(("text", "image", "spacer", "todo_list", "qr", "barcode")),
@@ -271,9 +272,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: config_entries.ConfigEntry) -> bool:
     """A config entry represents one network printer."""
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: config_entries.ConfigEntry) -> bool:
     """Unload one printer entry."""
-    return True
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
